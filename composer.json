@@ -1,0 +1,14 @@
+{
+    "name": "morton1117/mail",
+    "description": "mail test",
+    "type": "library",
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "Morton1117",
+            "email": "865240848@qq.com"
+        }
+    ],
+    "minimum-stability": "dev",
+    "require": {}
+}
