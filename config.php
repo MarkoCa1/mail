@@ -1,9 +1,11 @@
 <?php
-class Helper_X_Mail_Config
+class Config
 {
 	protected $username = '';
 	protected $password = '';
 	protected $imap = '';
+	protected $smtp = '';
+	protected $smtp_proxy = '';
 	protected $begin_date = '';
 	protected $end_date = '';
 	protected $mailbox = 'INBOX';
@@ -27,6 +29,30 @@ class Helper_X_Mail_Config
 				break;
 		}
 	}
+
+	public function imapOpen($folder = 'INBOX')
+	{
+		try
+		{
+			$folder = imap_utf8_to_mutf7($folder);
+			$result = imap_open($this->imap . $folder, $this->username, $this->password);
+			$this->stream = $result;
+		}
+		catch (Exception $ex)
+		{
+			throw new Exception($ex->getMessage());
+		}
+		catch (Error $er)
+		{
+			throw new Error($er->getMessage());
+		}
+	}
+
+	public function imapClose()
+	{
+		imap_close($this->stream);
+	}
+
 	public function setUsername($username)
 	{
 		$this->username = $username;
@@ -39,14 +65,30 @@ class Helper_X_Mail_Config
 		$this->password = $password;
 	}
 
-	public function setBeginDate($begin_date)
+	public function smtpOpen()
 	{
-		$this->begin_date = $begin_date;
+		try
+		{
+			$smtp = fsockopen($this->smtp, $this->smtp_proxy);
+			$smtp_status = fgets($smtp);
+			if (strstr($smtp_status, '220') !== true)
+			{
+				$this->stream = $smtp;
+			}
+			else
+			{
+				throw new Exception('邮件服务器连接失败');
+			}
+		}
+		catch (Exception $ex)
+		{
+			throw new Exception($ex->getMessage());
+		}
+		catch (Error $er)
+		{
+			throw new Error($er->getMessage());
+		}
 	}
 
-	public function setEndDate($end_date)
-	{
-		$this->end_date = $end_date;
-	}
 
 }

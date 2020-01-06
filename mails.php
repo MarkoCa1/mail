@@ -1,29 +1,6 @@
 <?php
-class Helper_X_Mail_Mails extends Helper_X_Mail_Config
+class Imap extends Config
 {
-	public function openMail($folder = 'INBOX')
-	{
-		try
-		{
-			$folder = imap_utf8_to_mutf7($folder);
-			$result = imap_open($this->imap . $folder, $this->username, $this->password);
-			$this->stream = $result;
-		}
-		catch (Exception $ex)
-		{
-			throw new Exception($ex->getMessage());
-		}
-		catch (Error $er)
-		{
-			throw new Error($er->getMessage());
-		}
-	}
-
-	public function closeMail()
-	{
-		imap_close($this->stream);
-	}
-
 	public function getBoxes()
 	{
 		try
@@ -91,7 +68,6 @@ class Helper_X_Mail_Mails extends Helper_X_Mail_Config
 				}
 				return $data;
 			}
-
 		}
 		catch (Exception $ex)
 		{
@@ -107,27 +83,34 @@ class Helper_X_Mail_Mails extends Helper_X_Mail_Config
 	{
 		try
 		{
-			$subject = imap_mime_header_decode($header->subject);
-			$text = $subject[0]->text;
-			$header_info['Uid'] = $uid;
-			if ($subject[0]->charset != 'utf-8' && $subject[0]->charset != 'default')
+			if (empty($header->subject))
 			{
-				//found in mb_list_encodings()
-				if (in_array(strtoupper($subject[0]->charset),mb_list_encodings()))
+				$text = '（无主题）';
+			}
+			else
+			{
+				$subject = imap_mime_header_decode($header->subject);
+				$text = $subject[0]->text;
+				if ($subject[0]->charset != 'utf-8' && $subject[0]->charset != 'default')
 				{
-					$text = mb_convert_encoding($text,'UTF-8',$subject[0]->charset);
-				}
-				else
-				{
-					//try to convert with iconv()
-					$ret = iconv($subject[0]->charset, "UTF-8", $text);
-					if ($ret)
+					//found in mb_list_encodings()
+					if (in_array(strtoupper($subject[0]->charset),mb_list_encodings()))
 					{
-						$text =$ret;
-					}  //an error occurs (unknown charset)
+						$text = mb_convert_encoding($text,'UTF-8',$subject[0]->charset);
+					}
+					else
+					{
+						//try to convert with iconv()
+						$ret = iconv($subject[0]->charset, "UTF-8", $text);
+						if ($ret)
+						{
+							$text =$ret;
+						}  //an error occurs (unknown charset)
+					}
 				}
 			}
 			$header_info['Subject'] = $text;
+			$header_info['Uid'] = $uid;
 			$header_info['Date'] = date('Y-m-d H:i:s', (isset($header->Date) ? strtotime($header->Date) : strtotime($header->MailDate)));
 			$header_info['FromAddress'] = imap_utf8($header->fromaddress);
 			$header_info['ToAddress'] = imap_utf8($header->toaddress);
@@ -135,7 +118,14 @@ class Helper_X_Mail_Mails extends Helper_X_Mail_Config
 			$header_info['ReplyToAddress'] = isset($header->reply_toaddress) ? imap_utf8($header->reply_toaddress) : '';
 			$header_info['SenderAddress'] = isset($header->senderaddress) ? imap_utf8($header->senderaddress) : '';
 			$header_info['References'] = isset($header->references) ? imap_utf8($header->references) : '';
-			$header_info['InReplyTo'] = isset($header->in_reply_to) ? imap_utf8($header->in_reply_to) : '';
+
+			$header_info['InReplyTo'] = '';
+			if (isset($header->in_reply_to))
+			{
+				$reply_subject = imap_mime_header_decode($header->in_reply_to);
+				$header_info['InReplyTo'] = $reply_subject[0]->text;
+			}
+
 			$header_info['MessageId'] = isset($header->message_id) ? imap_utf8($header->message_id) : '';
 			$header_info['Recent'] = trim($header->Recent);
 			$header_info['Unseen'] = trim($header->Unseen);
@@ -149,10 +139,10 @@ class Helper_X_Mail_Mails extends Helper_X_Mail_Config
 			{
 				foreach ($header->cc as $cc)
 				{
-					$header_info['CCAddress'] .= isset($cc->personal) ? imap_utf8(trim($cc->personal)) . ' ' : '';
-					$header_info['CCAddress'] .= '<' . trim($cc->mailbox) . '@' . trim($cc->host) . '>,';
+					$header_info['CcAddress'] .= isset($cc->personal) ? imap_utf8(trim($cc->personal)) . ' ' : '';
+					$header_info['CcAddress'] .= '<' . trim($cc->mailbox) . '@' . trim($cc->host) . '>,';
 				}
-				$header_info['CCAddress'] = trim($header_info['CCAddress'], ',');
+				$header_info['CcAddress'] = trim($header_info['CCAddress'], ',');
 			}
 			return $header_info;
 		}
@@ -256,5 +246,13 @@ class Helper_X_Mail_Mails extends Helper_X_Mail_Config
 		return isset($primary_mime_type[$type]) ? $primary_mime_type[$type] : 'OTHER';
 	}
 
+	public function setBeginDate($begin_date)
+	{
+		$this->begin_date = $begin_date;
+	}
 
+	public function setEndDate($end_date)
+	{
+		$this->end_date = $end_date;
+	}
 }
