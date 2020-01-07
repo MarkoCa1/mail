@@ -143,7 +143,7 @@ class Imap extends Config
 					$header_info['CcAddress'] .= isset($cc->personal) ? imap_utf8(trim($cc->personal)) . ' ' : '';
 					$header_info['CcAddress'] .= '<' . trim($cc->mailbox) . '@' . trim($cc->host) . '>,';
 				}
-				$header_info['CcAddress'] = trim($header_info['CCAddress'], ',');
+				$header_info['CcAddress'] = trim($header_info['CcAddress'], ',');
 			}
 			return $header_info;
 		}
