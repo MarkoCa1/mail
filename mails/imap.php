@@ -115,7 +115,7 @@ class Imap extends Config
 			$header_info['Date'] = date('Y-m-d H:i:s', (isset($header->Date) ? strtotime($header->Date) : strtotime($header->MailDate)));
 			$header_info['FromAddress'] = imap_utf8($header->fromaddress);
 			$header_info['ToAddress'] = imap_utf8($header->toaddress);
-			$header_info['CCAddress'] = '';
+			$header_info['CcAddress'] = '';
 			$header_info['ReplyToAddress'] = isset($header->reply_toaddress) ? imap_utf8($header->reply_toaddress) : '';
 			$header_info['SenderAddress'] = isset($header->senderaddress) ? imap_utf8($header->senderaddress) : '';
 			$header_info['References'] = isset($header->references) ? imap_utf8($header->references) : '';
