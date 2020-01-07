@@ -1,4 +1,5 @@
 <?php
+namespace Yy;
 class Imap extends Config
 {
 	public function getBoxes()

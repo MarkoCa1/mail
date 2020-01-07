@@ -1,4 +1,5 @@
 <?php
+namespace Yy;
 class Config
 {
 	protected $username = '';

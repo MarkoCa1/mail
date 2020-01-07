@@ -1,5 +1,6 @@
 <?php
-class Mark extends Config
+namespace Yy;
+class Mark extends \Yy\Config
 {
 	public function set_seen($uid)
 	{

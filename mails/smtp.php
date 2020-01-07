@@ -1,4 +1,5 @@
 <?php
+namespace Yy;
 class Smtp extends Config
 {
 	private function ini()
