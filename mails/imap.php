@@ -1,17 +1,23 @@
 <?php
-namespace Yy;
+namespace Morton;
 class Imap extends Config
 {
-	public function getBoxes()
+
+	/**
+	 * Get the subscription folder
+	 * Such as inbox, sent
+	 * @return array
+	 */
+	public function getFolder()
 	{
 		try
 		{
 			$result = imap_list($this->stream, '{imap.example.org}', '*');
 			foreach ($result as $name)
 			{
-				$boxes []= imap_mutf7_to_utf8(str_replace('{imap.example.org}', '', $name));
+				$folder []= imap_mutf7_to_utf8(str_replace('{imap.example.org}', '', $name));
 			}
-			return $boxes;
+			return $folder;
 		}
 		catch (Exception $ex)
 		{
@@ -23,6 +29,12 @@ class Imap extends Config
 		}
 	}
 
+	/**
+	 * Get mail ID
+	 * you can use $mails->setBeginDate() to set begin date
+	 * you can use $mails->setEndDate() to set end date
+	 * @return array
+	 */
 	public function getUid()
 	{
 		try
@@ -50,17 +62,26 @@ class Imap extends Config
 		}
 	}
 
-	public function getHeader()
+	/**
+	 * Get mail header
+	 * @uid array
+	 * Not passing the uid means getting the headers for all messages under the current folder
+	 * @return array
+	 */
+	public function getHeader($uid = array())
 	{
 		try
 		{
-			$uid = $this->getUid();
+			if (empty($uid))
+			{
+				$uid = $this->getUid();
+			}
 			if($uid)
 			{
 				$uid = is_array($uid) ? $uid : array($uid);
 				foreach ($uid as $u)
 				{
-					$msgno = imap_msgno($this->stream, $u);
+					$msgno = $this->getMsgnoByUid($u);
 					$header = imap_header($this->stream, $msgno);
 					if ($header)
 					{
@@ -157,6 +178,25 @@ class Imap extends Config
 		}
 	}
 
+	/**
+	 * Get mail msgno
+	 * @uid string
+	 * @return  string
+	 */
+	public function getMsgnoByUid($uid)
+	{
+		$msgno = imap_msgno($this->stream, $uid);
+		return $msgno;
+	}
+
+
+	/**
+	 * Get mail body
+	 * @msgno string
+	 * You can get msgno in the result of getting the header
+	 * or use getMsgnoByUid()
+	 * @return  array
+	 */
 	public function getBody($msgno, $structure = false, $part_number = false)
 	{
 		try
@@ -247,11 +287,19 @@ class Imap extends Config
 		return isset($primary_mime_type[$type]) ? $primary_mime_type[$type] : 'OTHER';
 	}
 
+	/**
+	 * set begin date
+	 * @begin_date date
+	 */
 	public function setBeginDate($begin_date)
 	{
 		$this->begin_date = $begin_date;
 	}
 
+	/**
+	 * set end date
+	 * @end_date date
+	 */
 	public function setEndDate($end_date)
 	{
 		$this->end_date = $end_date;

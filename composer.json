@@ -5,7 +5,7 @@
     "license": "MIT",
     "authors": [
         {
-            "name": "Morton1117",
+            "name": "Morton",
             "email": "865240848@qq.com"
         }
     ],
@@ -13,7 +13,7 @@
     "require": {},
     "autoload": {
         "psr-4": {
-            "Yy\\":"mails/"
+            "Morton\\":"mails/"
         }
     }
 }

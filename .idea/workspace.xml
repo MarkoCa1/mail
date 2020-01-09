@@ -1,9 +1,14 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="ChangeListManager">
-    <list default="true" id="11be3326-d45a-4be4-b338-49aa3e526578" name="Default Changelist" comment="">
+    <list default="true" id="ba4c7ed9-0d2b-49a9-a890-96809979561f" name="Default Changelist" comment="">
+      <change beforePath="$PROJECT_DIR$/.idea/mail.iml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/mail.iml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/composer.json" beforeDir="false" afterPath="$PROJECT_DIR$/composer.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/mails/config.php" beforeDir="false" afterPath="$PROJECT_DIR$/mails/config.php" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/mails/imap.php" beforeDir="false" afterPath="$PROJECT_DIR$/mails/imap.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/mails/mark.php" beforeDir="false" afterPath="$PROJECT_DIR$/mails/mark.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/mails/smtp.php" beforeDir="false" afterPath="$PROJECT_DIR$/mails/smtp.php" afterDir="false" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="SHOW_DIALOG" value="false" />
@@ -11,7 +16,7 @@
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
     <option name="LAST_RESOLUTION" value="IGNORE" />
   </component>
-  <component name="ComposerSettings" doNotAsk="true" synchronizationState="SYNCHRONIZE">
+  <component name="ComposerSettings" synchronizationState="SYNCHRONIZE">
     <pharConfigPath>$PROJECT_DIR$/composer.json</pharConfigPath>
     <execution>
       <executable />
@@ -20,11 +25,10 @@
   <component name="Git.Settings">
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
   </component>
-  <component name="ProjectId" id="1VuXHiLV649DXjZ2wpwpDv2muvu" />
+  <component name="ProjectId" id="1W8cuJdGBLxc8cgcxEeJnkV3C4t" />
   <component name="PropertiesComponent">
     <property name="WebServerToolWindowFactoryState" value="false" />
     <property name="last_opened_file_path" value="$PROJECT_DIR$" />
-    <property name="settings.editor.selected.configurable" value="preferences.lookFeel" />
   </component>
   <component name="RunDashboard">
     <option name="ruleStates">
@@ -43,15 +47,12 @@
   </component>
   <component name="TaskManager">
     <task active="true" id="Default" summary="Default task">
-      <changelist id="11be3326-d45a-4be4-b338-49aa3e526578" name="Default Changelist" comment="" />
-      <created>1578103867985</created>
+      <changelist id="ba4c7ed9-0d2b-49a9-a890-96809979561f" name="Default Changelist" comment="" />
+      <created>1578534883960</created>
       <option name="number" value="Default" />
       <option name="presentableId" value="Default" />
-      <updated>1578103867985</updated>
-      <workItem from="1578103869305" duration="538000" />
-      <workItem from="1578304174849" duration="731000" />
-      <workItem from="1578358999241" duration="513000" />
-      <workItem from="1578359816940" duration="1842000" />
+      <updated>1578534883960</updated>
+      <workItem from="1578534885130" duration="1220000" />
     </task>
     <servers />
   </component>
@@ -63,9 +64,7 @@
       <map>
         <entry key="MAIN">
           <value>
-            <State>
-              <option name="COLUMN_ORDER" />
-            </State>
+            <State />
           </value>
         </entry>
       </map>
