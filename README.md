@@ -53,4 +53,10 @@ $mail = new \Morton\Smtp(username, passwork);
 
 //$mail->setAttach($attach);
 
+//$attach = array(
+
+  [0] = array('filename', base64_encode('content'));
+
+  );
+
 $result = $mail->send($subject, $to, $mails_body);
