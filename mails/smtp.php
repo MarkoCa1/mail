@@ -2,6 +2,33 @@
 namespace Morton;
 class Smtp extends Config
 {
+	/**
+	 * cc
+	 * @var array
+	 * cc :copy to (mail address)
+	 */
+	protected $cc;
+
+	/**
+	 * in_reply_to
+	 * @var string
+	 * in_reply_to (The message_id of the email you replied to)
+	 */
+	protected $in_reply_to;
+
+	/**
+	 * references
+	 * @var string
+	 * references string (The message_id of the historical reply message)
+	 */
+	protected $references;
+
+	/**
+	 * attach
+	 * @var file
+	 * attachment
+	 */
+	protected $attach;
 
 	/**
 	 * Connect smtp
@@ -42,17 +69,9 @@ class Smtp extends Config
 	 * send mail
 	 * @subject string
 	 * @to array
-	 * @cc array
 	 * @mails_body string
-	 * @in_reply_to string
-	 * @references string
-	 * @attach file
-	 *
-	 * cc :copy to (mail address)
-	 * in_reply_to (The message_id of the email you replied to)
-	 * references string (The message_id of the historical reply message)
 	 */
-	public function send($subject, $to = array(), $cc = array(), $mails_body, $in_reply_to, $references, $attach)
+	public function send($subject, $to = array(), $mails_body)
 	{
 		// 初始化邮件发送设置
 		$this->ini();
@@ -64,9 +83,12 @@ class Smtp extends Config
 			$this->execute($this->stream, 'RCPT TO:<' . $t . ">\r\n", '250');
 		}
 		// 抄送人
-		foreach ($cc as $c)
+		if ( ! empty($this->cc))
 		{
-			$this->execute($this->stream, 'RCPT TO:<' . $c . ">\r\n", '250');
+			foreach ($this->cc as $c)
+			{
+				$this->execute($this->stream, 'RCPT TO:<' . $c . ">\r\n", '250');
+			}
 		}
 		// 邮件内容
 		$body = 'From:' . $this->username . "\r\n";
@@ -74,24 +96,33 @@ class Smtp extends Config
 		{
 			$body .= 'To:' . $t . "\r\n";
 		}
-		foreach ($cc as $c)
+		if ( ! empty($this->cc))
 		{
-			$body .= 'Cc:' . $c . "\r\n";
+			foreach ($this->cc as $c)
+			{
+				$body .= 'Cc:' . $c . "\r\n";
+			}
 		}
 		$boundary = 'part_' . uniqid();
 		$body .= 'Subject:' . $subject . "\r\n";
 		$body .= 'Date:' . date('Y-m-d H:i:s', time()) . "\r\n";
-		$body .= 'In-Reply-To:' . $in_reply_to . "\r\n";
-		$body .= 'References:' . $references . "\r\n";
+		if ( ! empty($this->in_reply_to))
+		{
+			$body .= 'In-Reply-To:' . $this->in_reply_to . "\r\n";
+		}
+		if ( ! empty($this->references))
+		{
+			$body .= 'References:' . $this->references . "\r\n";
+		}
 		$body .= 'Content-Type: multipart/mixed; boundary=' . $boundary . "\r\n\r\n";
 		$body .= '--' . $boundary . "\r\n";
 		$body .= 'Content-Type: text/html; charset=utf-8;' . "\r\n";
 		$body .= 'Content-Transfer-Encoding: 8bit' . "\r\n\r\n";
 		$body .= $mails_body . "\r\n\r\n";
 		// 判断是否存在附件
-		if ( ! empty($attach))
+		if ( ! empty($this->attach))
 		{
-			foreach ($attach as $a)
+			foreach ($this->attach as $a)
 			{
 				$filename = isset($a['filename']) ? $a['filename'] : 'aaa.txt';
 				$content = isset($a['content']) ? $a['content'] : '';
@@ -107,6 +138,26 @@ class Smtp extends Config
 		$this->execute($this->stream, "DATA\r\n", '354');
 		$this->execute($this->stream, $body, '250');
 		$this->execute($this->stream, "QUIT\r\n", '221');
+	}
+
+	private function setCc($cc)
+	{
+		$this->cc = $cc;
+	}
+
+	private function setAttach($attach)
+	{
+		$this->attach = $attach;
+	}
+
+	private function setInReplyTo($in_reply_to)
+	{
+		$this->in_reply_to = $in_reply_to;
+	}
+
+	private function setReferences($references)
+	{
+		$this->references = $references;
 	}
 
 	private function execute($handle, $command, $status)
@@ -129,4 +180,5 @@ class Smtp extends Config
 			throw new Error($er->getMessage());
 		}
 	}
+
 }
