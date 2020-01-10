@@ -51,12 +51,12 @@ $mail = new \Morton\Smtp(username, passwork);
 
 //$mail->setReferences($references);
 
-//$mail->setAttach($attach);
-
 //$attach = array(
 
 //[0] = array('filename', base64_encode('content'));
 
 //);
+
+//$mail->setAttach($attach);
 
 $result = $mail->send($subject, $to, $mails_body);
