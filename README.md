@@ -45,4 +45,12 @@ $mail->imapClose();
 
 $mail = new \Morton\Smtp(username, passwork);
 
-$result = $mail->send($subject, $to, $cc, $mails_body, $in_reply_to, $references, $attach);
+//$mail->setCc($cc);
+
+//$mail->setInReplyTo(in_reply_to);
+
+//$mail->setReferences($references);
+
+//$mail->setAttach($attach);
+
+$result = $mail->send($subject, $to, $mails_body);
