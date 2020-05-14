@@ -1,5 +1,5 @@
 <?php
-namespace Morton;
+namespace Sxstem\Mails;
 class Mark extends Config
 {
 	/**

@@ -1,5 +1,6 @@
 <?php
-namespace Morton;
+namespace Sxstem\Mails;
+use Exception;
 class Imap extends Config
 {
 
@@ -21,11 +22,11 @@ class Imap extends Config
 		}
 		catch (Exception $ex)
 		{
-			throw new Exception($ex->getMessage());
+			throw new Exception('获取文件夹错误' . $ex->getMessage());
 		}
 		catch (Error $er)
 		{
-			throw new Error($er->getMessage());
+			throw new Error('获取文件夹错误' . $er->getMessage());
 		}
 	}
 
@@ -54,11 +55,11 @@ class Imap extends Config
 		}
 		catch (Exception $ex)
 		{
-			throw new Exception($ex->getMessage());
+			throw new Exception('获取UID错误' . $ex->getMessage());
 		}
 		catch (Error $er)
 		{
-			throw new Error($er->getMessage());
+			throw new Error('获取UID错误' . $er->getMessage());
 		}
 	}
 
@@ -79,6 +80,7 @@ class Imap extends Config
 			if($uid)
 			{
 				$uid = is_array($uid) ? $uid : array($uid);
+				$data = array();
 				foreach ($uid as $u)
 				{
 					$msgno = $this->getMsgnoByUid($u);
@@ -135,7 +137,7 @@ class Imap extends Config
 			$header_info['Uid'] = $uid;
 			$header_info['Date'] = date('Y-m-d H:i:s', (isset($header->Date) ? strtotime($header->Date) : strtotime($header->MailDate)));
 			$header_info['FromAddress'] = imap_utf8($header->fromaddress);
-			$header_info['ToAddress'] = imap_utf8($header->toaddress);
+			$header_info['ToAddress'] = empty($header->toaddress) ? '' : imap_utf8($header->toaddress);
 			$header_info['CcAddress'] = '';
 			$header_info['ReplyToAddress'] = isset($header->reply_toaddress) ? imap_utf8($header->reply_toaddress) : '';
 			$header_info['SenderAddress'] = isset($header->senderaddress) ? imap_utf8($header->senderaddress) : '';
@@ -170,11 +172,11 @@ class Imap extends Config
 		}
 		catch (Exception $ex)
 		{
-			throw new Exception($ex->getMessage());
+			throw new Exception('整理邮件头失败，UID:' . $ex->getMessage());
 		}
 		catch (Error $er)
 		{
-			throw new Error($er->getMessage());
+			throw new Error('整理邮件头失败，UID:' . $er->getMessage());
 		}
 	}
 
@@ -237,7 +239,7 @@ class Imap extends Config
 				{
 					$body = imap_qprint($body);
 				}
-				if (($structure->parameters)[0]->attribute == 'charset')
+				if (is_array($structure->parameters) && empty($structure->ifdparameters) && ($structure->parameters)[0]->attribute == 'charset')
 				{
 					$body = iconv(($structure->parameters)[0]->value, 'utf-8//IGNORE', $body);
 				}
@@ -273,11 +275,11 @@ class Imap extends Config
 		}
 		catch (Exception $ex)
 		{
-			throw new Exception($ex->getMessage());
+			throw new Exception('获取邮件内容失败，MsgNo:' . $msgno . $ex->getMessage());
 		}
 		catch (Error $er)
 		{
-			throw new Error($er->getMessage());
+			throw new Error('获取邮件内容失败，MsgNo:' . $msgno . $er->getMessage());
 		}
 	}
 

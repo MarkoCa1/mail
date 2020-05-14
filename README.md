@@ -1,9 +1,21 @@
-# mails
+Mails, PHP Mails
+=======================
+
+## Install
+
+The recommended way to install sxstem/mails is through
+[Composer](http://getcomposer.org).
+
+```bash
+composer require sxstem/mails
+```
 
 
-#GET
+## Example
 
-$mail = new \Morton\Imap(username, passwork, [mailbox]);  //The mailbox defaults to inbox
+- GET
+```php
+$mail = new \Sxstem\Mails\Imap(username, passwork, [mailbox]);  //The mailbox defaults to inbox
 
 $result = $mail->getFolder(); //get folder
 
@@ -18,11 +30,12 @@ $result = $mail->getFolder(); //get folder
 //$result = $mail->setFolder($mailbox);  //reconnect imap
 
 $mail->imapClose();
+```
 
 
-#Mark
-
-$mail = new \Morton\Mark(username, passwork, [mailbox]);
+- Mark
+```php
+$mail = new \Sxstem\Mails\Mark(username, passwork, [mailbox]);
 
 $result = $mail->set_seen($uid);
 
@@ -39,10 +52,12 @@ $result = $mail->set_seen($uid);
 //$result = $mail->move_mail($uid, $mailbox);
 
 $mail->imapClose();
+```
 
-
-#SMTP
-
-$mail = new \Morton\Smtp(username, passwork);
-
-$result = $mail->send($subject, $to, $cc, $mails_body, $in_reply_to, $references, $attach);
+- SMTP
+```php
+$mail = new \Sxstem\Mails\Smtp(username, passwork);
+// $mail->debug(true);
+$result = $mail->send($subject, $to, $cc, $mails_body, $attach, $in_reply_to, $references);
+//$cc, $attach, $in_reply_to, $references can be ''
+```

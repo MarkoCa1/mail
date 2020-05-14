@@ -1,5 +1,6 @@
 <?php
-namespace Morton;
+namespace Sxstem\Mails;
+use Exception;
 class Config
 {
 	/**
@@ -57,6 +58,18 @@ class Config
 	protected $stream;
 
 	/**
+	 * smtp debug
+	 * @var resources
+	 */
+	protected $debug = false;
+
+	/**
+	 * execute_list
+	 * @var resources
+	 */
+	protected $execute_list = array();
+
+	/**
 	 * Connect imap
 	 * @username string
 	 * @password string
@@ -95,14 +108,24 @@ class Config
 				$this->smtp = 'ssl://smtp.qq.com';
 				$this->smtp_proxy = '465';
 				break;
-			case '126.com':
-				$this->imap = '{imap.126.com:993/imap/ssl}';
-				$this->smtp = 'ssl://smtp.126.com';
-				$this->smtp_proxy = '465';
-				break;
-			case 'yeah.com':
+			case 'yeah.net':
 				$this->imap = '{imap.yeah.net:993/imap/ssl}';
 				$this->smtp = 'ssl://smtp.yeah.net';
+				$this->smtp_proxy = '465';
+				break;
+			case 'outlook.com':
+				$this->imap = '{outlook.office365.com:993/imap/ssl}';
+				$this->smtp = 'smtp.office365.com';
+				$this->smtp_proxy = '587';
+				break;
+			case 'hotmail.com':
+				$this->imap = '{outlook.office365.com:993/imap/ssl}';
+				$this->smtp = 'smtp.office365.com';
+				$this->smtp_proxy = '587';
+				break;
+			case 'gmail.com':
+				$this->imap = '{imap.gmail.com:993/imap/ssl}';
+				$this->smtp = 'ssl://smtp.gmail.com';
 				$this->smtp_proxy = '465';
 				break;
 		}
@@ -131,11 +154,11 @@ class Config
 		}
 		catch (Exception $ex)
 		{
-			throw new Exception($ex->getMessage());
+			throw new Exception('连接邮箱失败' . $ex->getMessage());
 		}
 		catch (Error $er)
 		{
-			throw new Error($er->getMessage());
+			throw new Error('连接邮箱失败' . $er->getMessage());
 		}
 	}
 
@@ -164,11 +187,11 @@ class Config
 		}
 		catch (Exception $ex)
 		{
-			throw new Exception($ex->getMessage());
+			throw new Exception('邮件服务器连接失败' . $ex->getMessage());
 		}
 		catch (Error $er)
 		{
-			throw new Error($er->getMessage());
+			throw new Error('邮件服务器连接失败' . $er->getMessage());
 		}
 	}
 
