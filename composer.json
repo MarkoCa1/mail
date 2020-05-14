@@ -1,6 +1,6 @@
 {
     "name": "morton1117/mail",
-    "description": "mail test",
+    "description": "Mails",
     "type": "library",
     "license": "MIT",
     "authors": [
@@ -13,7 +13,7 @@
     "require": {},
     "autoload": {
         "psr-4": {
-            "Morton\\":"mails/"
+            "Morton1117\\Mails\\":"src/"
         }
     }
 }
