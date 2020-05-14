@@ -52,6 +52,7 @@ $result = $mail->set_seen($uid);
 //$result = $mail->move_mail($uid, $mailbox);
 
 $mail->imapClose();
+<<<<<<< HEAD
 ```
 
 - SMTP
@@ -61,3 +62,26 @@ $mail = new \Sxstem\Mails\Smtp(username, passwork);
 $result = $mail->send($subject, $to, $cc, $mails_body, $attach, $in_reply_to, $references);
 //$cc, $attach, $in_reply_to, $references can be ''
 ```
+=======
+
+
+#SMTP
+
+$mail = new \Morton\Smtp(username, passwork);
+
+//$mail->setCc($cc);
+
+//$mail->setInReplyTo(in_reply_to);
+
+//$mail->setReferences($references);
+
+//$attach = array(
+
+//[0] = array('filename', base64_encode('content'));
+
+//);
+
+//$mail->setAttach($attach);
+
+$result = $mail->send($subject, $to, $mails_body);
+>>>>>>> 1047bf7d39e41052f62692d6151f2504672849e1
